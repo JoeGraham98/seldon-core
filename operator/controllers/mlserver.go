@@ -27,6 +27,8 @@ const (
 	MLServerHuggingFaceCacheEnvDefault = "/opt/mlserver"
 	MLServerHTTPPortEnv                = "MLSERVER_HTTP_PORT"
 	MLServerGRPCPortEnv                = "MLSERVER_GRPC_PORT"
+	MLServerMetricsPortEnv             = "MLSERVER_METRICS_PORT"
+	MLServerMetricsEndpointEnv         = "MLSERVER_METRICS_ENDPOINT"
 	MLServerModelNameEnv               = "MLSERVER_MODEL_NAME"
 	MLServerModelImplementationEnv     = "MLSERVER_MODEL_IMPLEMENTATION"
 	MLServerModelURIEnv                = "MLSERVER_MODEL_URI"
@@ -75,13 +77,13 @@ func mergeMLServerContainer(existing *v1.Container, mlServer *v1.Container) *v1.
 	if existing.ReadinessProbe == nil {
 		existing.ReadinessProbe = mlServer.ReadinessProbe
 	} else {
-		existing.ReadinessProbe.Handler = mlServer.ReadinessProbe.Handler
+		existing.ReadinessProbe.ProbeHandler = mlServer.ReadinessProbe.ProbeHandler
 	}
 
 	if existing.LivenessProbe == nil {
 		existing.LivenessProbe = mlServer.LivenessProbe
 	} else {
-		existing.LivenessProbe.Handler = mlServer.LivenessProbe.Handler
+		existing.LivenessProbe.ProbeHandler = mlServer.LivenessProbe.ProbeHandler
 	}
 
 	if existing.SecurityContext == nil {
@@ -129,7 +131,7 @@ func getMLServerContainer(pu *machinelearningv1.PredictiveUnit, namespace string
 			},
 		},
 		ReadinessProbe: &v1.Probe{
-			Handler: v1.Handler{HTTPGet: &v1.HTTPGetAction{
+			ProbeHandler: v1.ProbeHandler{HTTPGet: &v1.HTTPGetAction{
 				Path: constants.KFServingProbeReadyPath,
 				Port: intstr.FromString("http"),
 			}},
@@ -140,7 +142,7 @@ func getMLServerContainer(pu *machinelearningv1.PredictiveUnit, namespace string
 			TimeoutSeconds:      60,
 		},
 		LivenessProbe: &v1.Probe{
-			Handler: v1.Handler{HTTPGet: &v1.HTTPGetAction{
+			ProbeHandler: v1.ProbeHandler{HTTPGet: &v1.HTTPGetAction{
 				Path: constants.KFServingProbeLivePath,
 				Port: intstr.FromString("http"),
 			}},

@@ -485,7 +485,7 @@ def main():
 
     def _run_grpc_server(bind_address):
         """Start a server in a subprocess."""
-        logger.info(f"Starting new GRPC server with {args.grpc_threads}.")
+        logger.info(f"Starting new GRPC server with {args.grpc_threads} threads.")
 
         if args.tracing:
             from grpc_opentracing import open_tracing_server_interceptor
@@ -530,7 +530,7 @@ def main():
         with _reserve_grpc_port() as bind_port:
             bind_address = "0.0.0.0:{}".format(bind_port)
             logger.info(
-                f"GRPC Server Binding to '%s' {bind_address} with {args.workers} processes"
+                f"GRPC Server Binding to '%s' {bind_address} with {args.grpc_workers} processes."
             )
             sys.stdout.flush()
             workers = []

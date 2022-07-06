@@ -8,6 +8,10 @@ Make sure you also [read the CHANGELOG](./changelog.html) to see the detailed fe
 
 ## Upgrading to 1.14
 
+### CRD V1
+
+Only the v1 versions of the CRD will be supported moving forward. The v1beta1 versions will remain in the Helm chart but will be not updated. Allowing the operator to create the CRDs will result in the v1 CRD being created so will only work on Kubernetes clusters >= 1.18.
+
 ### Model Health Checks
 
 We have updated the health checks done by Seldon for the model nodes in your inference graph. If `executor.fullHealthChecks` is set to true then:
@@ -94,7 +98,7 @@ In Seldon Core 1.8 the rclone-based [storage initializer](https://github.com/Sel
 The storage initailizer image that is being used is controlled by the helm value:
 ```yaml
 storageInitializer:
-  image: seldonio/rclone-storage-initializer:1.14.0-dev
+  image: seldonio/rclone-storage-initializer:1.15.0-dev
 ```
 and can be customised on per-deployment basis as described in [Prepackaged Model Servers](../servers/overview.md) documentation by setting value of `storageInitializerImage` variable in the graph definition.
 
